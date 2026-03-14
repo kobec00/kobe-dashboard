@@ -136,7 +136,7 @@
 <div class="screen active" id="screen-home">
   <div class="header">
     <div class="header-top">
-      <div class="greeting">Hey <em>Kobe</em>,<br>wat staat er op?</div>
+      <div class="greeting" id="home-greeting">Goedemorgen <em>Kobe</em></div>
       <div class="date-badge" id="date-badge">...</div>
     </div>
     <div class="subtitle" id="subtitle-text">Laden...</div>
@@ -174,6 +174,16 @@
   <div class="card">
     <div class="card-label">&#128293; Dichtstbijzijnde deadline</div>
     <div id="home-next-deadline"></div>
+  </div>
+  <div style="display:flex;justify-content:flex-start">
+  <div class="card" style="padding:12px 14px;width:calc(50% - 8px)">
+    <div class="card-label" style="margin-bottom:6px">&#127891; STAGE OVER</div>
+    <div style="display:flex;align-items:baseline;gap:5px;margin-bottom:2px">
+      <span id="countdown-days" style="font-size:30px;font-weight:700;color:var(--accent);line-height:1">–</span>
+      <span style="font-size:12px;color:var(--muted)">dagen</span>
+    </div>
+    <div style="font-size:10px;color:var(--muted)">12 juni 2026</div>
+  </div>
   </div>
 </div>
 
@@ -223,10 +233,10 @@
       <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--warning)"><span style="font-size:9px;font-weight:700;background:rgba(247,196,106,.15);border-radius:4px;padding:1px 5px">V</span>Vroege</span>
       <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--accent2)"><span style="font-size:9px;font-weight:700;background:rgba(247,106,143,.15);border-radius:4px;padding:1px 5px">L</span>Late</span>
       <div style="width:1px;height:16px;background:var(--border);margin:0 2px"></div>
-      <button id="view-toggle" onclick="toggleView()" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s">Maand</button>
+      <button id="view-toggle" onclick="toggleView()" style="background:var(--surface2);border:1px solid var(--accent);color:var(--accent);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s">Week</button>
     </div>
   </div>
-  <div class="card" id="week-card">
+  <div class="card" id="week-card" style="display:none">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
       <button onclick="changeWeek(-1)" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 12px;font-size:16px;cursor:pointer">&#8249;</button>
       <span id="week-label" style="font-size:12px;color:var(--muted);font-weight:600"></span>
@@ -235,7 +245,7 @@
     <div class="week-grid" id="week-grid"></div>
     <div id="agenda-list"><div class="empty-state">Tik op een dag</div></div>
   </div>
-  <div id="month-card" style="display:none">
+  <div id="month-card">
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
         <button onclick="changeMonth(-1)" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 12px;font-size:16px;cursor:pointer">&#8249;</button>
@@ -257,6 +267,10 @@
       <div class="card-label" id="month-day-label"></div>
       <div id="month-day-shifts"></div>
     </div>
+  <div class="card">
+    <div class="card-label">&#127780;&#65039; WEER SINT-TRUIDEN</div>
+    <div id="weather-widget" style="padding:4px 0"><div style="color:var(--muted);font-size:12px;text-align:center">Laden...</div></div>
+  </div>
   </div>
 </div>
 
@@ -376,7 +390,7 @@ let shifts = [
   // Maart
   {id:'s1',  type:'Late',            date:'2026-03-11', start:'13:30', end:'21:30'},
   {id:'s2',  type:'Late',            date:'2026-03-13', start:'13:30', end:'21:30'},
-  {id:'s3',  type:'Vroege',          date:'2026-03-20', start:'07:00', end:'15:30'},
+  {id:'s3',  type:'Vroege',          date:'2026-03-18', start:'07:00', end:'15:30'},
   {id:'s4',  type:'Vroege',          date:'2026-03-21', start:'07:00', end:'15:30'},
   {id:'s5',  type:'Vroege',          date:'2026-03-22', start:'07:00', end:'15:30'},
   {id:'s6',  type:'Vroege',          date:'2026-03-23', start:'07:00', end:'15:30'},
@@ -385,11 +399,11 @@ let shifts = [
   {id:'s9',  type:'Vroege',          date:'2026-03-30', start:'07:00', end:'15:30'},
   // April
   {id:'s10', type:'Vroege',          date:'2026-04-01', start:'07:00', end:'15:30'},
-  {id:'s11', type:'Late',            date:'2026-04-03', start:'13:30', end:'21:30'},
+  {id:'s11', type:'Late',            date:'2026-04-07', start:'13:30', end:'21:30'},
   {id:'s12', type:'Vroege',          date:'2026-04-06', start:'07:00', end:'15:30'},
   {id:'s13', type:'Vroege',          date:'2026-04-08', start:'07:00', end:'15:30'},
   {id:'s14', type:'Vroege',          date:'2026-04-10', start:'07:00', end:'15:30'},
-  {id:'s15', type:'Late',            date:'2026-04-15', start:'13:30', end:'21:30'},
+  {id:'s15', type:'Late',            date:'2026-04-17', start:'13:30', end:'21:30'},
   {id:'s16', type:'Late',            date:'2026-04-18', start:'13:30', end:'21:30'},
   {id:'s17', type:'Late',            date:'2026-04-19', start:'13:30', end:'21:30'},
   {id:'s18', type:'Late',            date:'2026-04-20', start:'13:30', end:'21:30'},
@@ -729,7 +743,7 @@ function showDayShifts(dateStr){
 }
 
 // ── MAANDOVERZICHT ───────────────────────────────
-let viewMode='week'; // 'week' | 'month'
+let viewMode='month'; // 'week' | 'month'
 let monthOffset=0;
 let selectedMonthDay=null;
 
@@ -745,6 +759,7 @@ function toggleView(){
     btn.style.color='var(--accent)';
     btn.style.borderColor='var(--accent)';
     renderMonth();
+    fetchWeather();
   } else {
     weekCard.style.display='block';
     monthCard.style.display='none';
@@ -891,11 +906,70 @@ document.querySelectorAll('.modal-overlay').forEach(m=>{
 });
 
 // ── RENDER ────────────────────────────────────────
+function updateGreeting(){
+  const h=new Date().getHours();
+  const el=document.getElementById('home-greeting');
+  if(!el)return;
+  let gr=h>=5&&h<12?'Goedemorgen':h>=12&&h<18?'Goedemiddag':'Goedenavond';
+  el.innerHTML=gr+' <em>Kobe</em>';
+}
+
+function updateCountdown(){
+  const daysEl=document.getElementById('countdown-days');
+  if(!daysEl)return;
+  const today=new Date();today.setHours(0,0,0,0);
+  const end=new Date('2026-06-12');end.setHours(0,0,0,0);
+  const diff=Math.round((end-today)/(1000*60*60*24));
+  if(diff<=0){daysEl.textContent='🎉';return;}
+  daysEl.textContent=diff;
+}
+
+function wcIcon(c){if(c===0)return'☀️';if(c<=2)return'⛅';if(c<=3)return'☁️';if(c<=49)return'🌫️';if(c<=59)return'🌦️';if(c<=69)return'🌧️';if(c<=79)return'❄️';if(c<=84)return'🌦️';return'⛈️';}
+function wcDesc(c){if(c===0)return'Zonnig';if(c<=2)return'Licht bewolkt';if(c<=3)return'Bewolkt';if(c<=49)return'Mist';if(c<=59)return'Motregen';if(c<=69)return'Regen';if(c<=79)return'Sneeuw';if(c<=84)return'Buien';return'Onweer';}
+
+async function fetchWeather(){
+  const el=document.getElementById('weather-widget');
+  if(!el)return;
+  // Retry max 1x with small delay (for slow connections)
+  let d=null;
+  for(let attempt=0;attempt<2;attempt++){
+    try{
+      const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=50.818&longitude=5.187&current=temperature_2m,weathercode&daily=temperature_2m_max,temperature_2m_min,weathercode,precipitation_probability_max&timezone=Europe%2FBrussels&forecast_days=4',{cache:'no-cache'});
+      d=await r.json();
+      break;
+    }catch(e){
+      if(attempt===0){await new Promise(res=>setTimeout(res,1500));el.innerHTML='<div style="color:var(--muted);font-size:11px;text-align:center">Laden...</div>';}
+    }
+  }
+  if(!d){el.innerHTML='<div style="color:var(--muted);font-size:11px;text-align:center;padding:8px 0">⚠️ Geen verbinding<br><span style="font-size:10px">Werkt na GitHub Pages hosting</span></div>';return;}
+  try{
+    const icon=wcIcon(d.current.weathercode);
+    const temp=Math.round(d.current.temperature_2m);
+    const desc=wcDesc(d.current.weathercode);
+    const dayNames=['zo','ma','di','wo','do','vr','za'];
+    const forecast=d.daily.date.slice(1,4).map((dt,i)=>{
+      const day=dayNames[new Date(dt+'T12:00:00').getDay()];
+      const ic=wcIcon(d.daily.weathercode[i+1]);
+      const mx=Math.round(d.daily.temperature_2m_max[i+1]);
+      const mn=Math.round(d.daily.temperature_2m_min[i+1]);
+      const rain=d.daily.precipitation_probability_max[i+1];
+      return '<div style="flex:1;text-align:center;padding:6px 4px;background:var(--surface2);border-radius:8px"><div style="font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase">'+day+'</div><div style="font-size:16px;margin:2px 0">'+ic+'</div><div style="font-size:11px;font-weight:600">'+mx+'°</div><div style="font-size:10px;color:var(--muted)">'+mn+'°</div>'+(rain>30?'<div style="font-size:9px;color:#6af7c8">💧'+rain+'%</div>':'')+'</div>';
+    }).join('');
+    el.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><div style="font-size:36px">'+icon+'</div><div><div style="font-size:22px;font-weight:700">'+temp+'°C</div><div style="font-size:11px;color:var(--muted)">'+desc+' · Sint-Truiden</div></div></div><div style="display:flex;gap:6px">'+forecast+'</div>';
+  }catch(e){
+    el.innerHTML='<div style="color:var(--muted);font-size:11px;text-align:center;padding:8px 0">⚠️ Geen verbinding<br><span style="font-size:10px">Werkt na GitHub Pages hosting</span></div>';
+  }
+}
+
 function renderAll(){
+  updateGreeting();
+  updateCountdown();
+  if(viewMode==='month') fetchWeather();
   initHeader();renderHours();renderStats();
   renderNextShift();renderHomeDeadline();
   renderTasks();renderDeadlines();
-  renderWeek();renderNotes();
+  if(viewMode==='month') renderMonth(); else renderWeek();
+  renderNotes();
 }
 renderAll();
 </script>
