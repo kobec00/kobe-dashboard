@@ -1039,7 +1039,7 @@ async function fetchWeather(){
     const temp=Math.round(d.current.temperature_2m);
     const desc=wcDesc(d.current.weathercode);
     const dayNames=['zo','ma','di','wo','do','vr','za'];
-    const forecast=d.daily.date.slice(1,4).map((dt,i)=>{
+    const forecast=d.daily.time.slice(1,4).map((dt,i)=>{
       const day=dayNames[new Date(dt+'T12:00:00').getDay()];
       const ic=wcIcon(d.daily.weathercode[i+1]);
       const mx=Math.round(d.daily.temperature_2m_max[i+1]);
